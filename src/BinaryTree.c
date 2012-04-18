@@ -1,18 +1,38 @@
 #include<stdio.h>
 #include<stdlib.h>
+//#include "stack.c"
+
 
 struct BNode
 {
 int data;
 struct BNode* left;
 struct BNode* right;
-};
+}; 
 
 struct BinaryTree
 {
 struct BNode* root;
 
 };
+
+struct stacknode
+{
+struct BNode* data;
+struct stacknode* next;
+}; 
+struct stack
+{
+struct stacknode* top;
+
+}; 
+
+
+void preOrderTraversal(struct BNode* root);
+void preOrderTraversalNonRecursive(struct BNode* root);
+
+
+
 
 int main()
 {
@@ -55,7 +75,12 @@ node3->right=node7;
 printf("\n Hello World \n");
 printf("\n PreOrder Traversal using Recursion :  ");
 preOrderTraversal(node1);
+printf("\n PreOrder Traversal Non Recursive:  ");
+preOrderTraversalNonRecursive(node1);
 
+
+
+printf("\n");
 
 
 free(node1);
@@ -86,13 +111,76 @@ preOrderTraversal(root->right);
 
 void preOrderTraversalNonRecursive(struct BNode* root)
 {
+struct stack* mystack;
+struct BNode* t;
+mystack = (struct stack*) malloc(sizeof(struct stack));
 
-while(true)
+
+while(1)
 {
+	while(root!=NULL)
+	{
+		push(mystack,root);
+	printf("%d ", root->data);
+		root=root->left;
+	}
+//	printStack(mystack);
+	if(mystack->top==NULL)
+	break;
 
+	t= pop(mystack);
+	if(t->right!=NULL)
+		push(mystack,t->right);
+}
+
+ }
+
+struct BNode* pop(struct stack* s)
+{
+	struct stacknode* t;
+	if(isStackEmpty(s)!=1)
+	{
+	 t = s->top;
+	s->top=t->next;
+	return t->data;
+	}
+
+	return NULL;
 
 
 }
+
+int isStackEmpty(struct stack* s)
+{
+	if(s->top!=NULL)
+	return 0;
+	else
+	return 1;
+}
+
+void push(struct stack* s , struct BNode* b)
+{
+if(b!=NULL)
+{
+struct stacknode* newstacknode = (struct stacknode*) malloc(sizeof(struct stacknode));
+newstacknode->data = b;
+newstacknode->next = s->top;
+
+s->top = newstacknode;
+}
+
+} 
+
+void printStack(struct stack* s)
+{
+	struct stacknode* temp= s->top;
+
+	while(temp!=NULL)
+	{struct BNode* b= temp->data;
+	printf("%d ->", b->data);
+
+	temp=temp->next;
+	}
 
 }
 
